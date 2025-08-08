@@ -2,9 +2,8 @@
 # Flappy Bird Clone using Pygame Zero + pgzhelper
 # Run with: pgzrun main.py
 
-# TODO: Import the required modules
-# We need random for generating random numbers
-# We need pgzhelper for sprite animation & rotation helpers
+import random
+from pgzhelper import *
 
 # -----------------------------
 # Game Settings (CONSTANTS - Don't change these!)
@@ -20,15 +19,14 @@ SPAWN_INTERVAL = 1.5 # Seconds between pipe spawns
 # -----------------------------
 # Game State Variables
 # -----------------------------
-# TODO: Create the bird actor
-# - Position it at (75, 350)
-# - Set up the flapping animation frames: ["bird0", "bird1", "bird2"]
-# - Set animation speed (fps) to 10
-# - Initialize vertical velocity (vy) to 0
+bird = Actor("bird0", (75, 350))
+bird.images = ["bird0", "bird1", "bird2"]
+bird.fps = 10
+bird.vy = 0
 
-# TODO: Create a list to hold pipe pairs
-# TODO: Initialize score to 0
-# TODO: Set game_over to False
+pipes = []
+score = 0
+game_over = False
 
 # -----------------------------
 # Sound Effects (CONSTANTS - Don't change these!)
@@ -53,7 +51,17 @@ def create_pipe():
     3. Create a bottom pipe actor positioned below the gap
     4. Add both pipes to the pipes list as a tuple
     """
-    pass
+    # Generate a random gap position between 150 and 500
+    gap_y = random.randint(150, 500)
+    
+    # Create a top pipe actor positioned above the gap
+    top_pipe = Actor("top", (WIDTH + 50, gap_y - GAP // 2))
+    
+    # Create a bottom pipe actor positioned below the gap
+    bottom_pipe = Actor("bottom", (WIDTH + 50, gap_y + GAP // 2))
+    
+    # Add both pipes to the pipes list as a tuple
+    pipes.append((top_pipe, bottom_pipe))
 
 def reset_game():
     """
@@ -86,7 +94,7 @@ def update():
     """
     Update game logic each frame (called automatically by Pygame Zero).
     
-    TODO: Implement this function to:
+    SOLUTION: Implement this function to:
     1. If game is over, return early (don't update anything)
     2. Apply gravity to bird (increase vy by GRAVITY)
     3. Update bird position (add vy to y)
@@ -99,7 +107,45 @@ def update():
     10. Check for collisions with pipes or screen boundaries
     11. If collision detected, play hit/die sounds and set game_over to True
     """
-    pass
+    global game_over, score
+
+    # SOLUTION: If game is over, return early (don't update anything)
+    if game_over:
+        return
+
+    # SOLUTION: Apply gravity to bird (increase vy by GRAVITY)
+    bird.vy += GRAVITY
+    
+    # SOLUTION: Update bird position (add vy to y)
+    bird.y += bird.vy
+    
+    # SOLUTION: Animate bird flapping (next_image())
+    bird.next_image()
+    
+    # SOLUTION: Rotate bird based on velocity (tilt up when flapping, down when falling)
+    bird.angle = max(-30, min(60, -bird.vy * 5))
+
+    # SOLUTION: Move all pipes to the left by PIPE_SPEED
+    for top, bottom in pipes:
+        top.x -= PIPE_SPEED
+        bottom.x -= PIPE_SPEED
+
+    # SOLUTION: Remove pipes that have moved off screen and increment score when bird passes a pipe
+    if pipes and pipes[0][0].right < 0:
+        pipes.pop(0)
+        score += 1
+        # SOLUTION: Play sound effects for scoring
+        sounds.sfx_point.play()
+        sounds.sfx_swooshing.play()
+
+    # SOLUTION: Check for collisions with pipes or screen boundaries
+    for top, bottom in pipes:
+        if bird.colliderect(top) or bird.colliderect(bottom) or bird.top < 0 or bird.bottom > HEIGHT:
+            # SOLUTION: If collision detected, play hit/die sounds and set game_over to True
+            sounds.sfx_hit.play()
+            sounds.sfx_die.play()
+            game_over = True
+            break
 
 def on_key_down(key):
     """
@@ -122,7 +168,14 @@ def update_pipes():
     2. Check if no pipes exist OR if the last pipe is far enough away
     3. If conditions are met, call create_pipe()
     """
-    pass
+    # Check if game is not over
+    if game_over:
+        return
+    
+    # Check if no pipes exist OR if the last pipe is far enough away
+    if len(pipes) == 0 or pipes[-1][0].x < WIDTH - 200:
+        # If conditions are met, call create_pipe()
+        create_pipe()
 
 # TODO: Schedule the pipe spawning function to run every SPAWN_INTERVAL seconds
 # Use: clock.schedule_interval(update_pipes, SPAWN_INTERVAL)

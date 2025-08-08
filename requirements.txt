@@ -1,0 +1,3 @@
+pygame-zero>=1.2.0
+pgzhelper-rw>=1.0.10 
+pygame>=2.0.0 
