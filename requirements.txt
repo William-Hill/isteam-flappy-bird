@@ -1,0 +1,2 @@
+pgzero>=1.2.1
+pgzhelper-rw>=1.0.10

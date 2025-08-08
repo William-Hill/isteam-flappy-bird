@@ -18,6 +18,7 @@ This Flappy Bird clone demonstrates key programming concepts including:
 isteam-flappy-bird/
 ├── flappy_bird/
 │   ├── main.py              # Main game file (teaching shell version)
+│   ├── solution.py          # Complete working solution (for instructors)
 │   ├── images/              # Game assets
 │   │   ├── background.png   # Background image
 │   │   ├── bird0.png        # Bird animation frame 1
@@ -33,7 +34,9 @@ isteam-flappy-bird/
 │       ├── sfx_hit.wav      # Collision sound
 │       ├── sfx_die.wav      # Game over sound
 │       └── sfx_swooshing.wav # Pipe passage sound
-└── README.md                # This file
+├── requirements.txt         # Python dependencies
+├── .gitignore              # Git ignore rules
+└── README.md               # This file
 ```
 
 ## 🚀 Getting Started
@@ -41,13 +44,15 @@ isteam-flappy-bird/
 ### Prerequisites
 
 1. **Python 3.7+** - Download from [python.org](https://python.org)
-2. **Pygame Zero** - Install via pip:
+2. **Dependencies** - Install all required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   
+   Or install individually:
    ```bash
    pip install pgzero
-   ```
-3. **pgzhelper** - Install via pip:
-   ```bash
-   pip install pgzhelper
+   pip install pgzhelper-rw
    ```
 
 ### Installation
@@ -74,6 +79,10 @@ isteam-flappy-bird/
 ### For Instructors
 
 This project is designed for teaching programming concepts step-by-step. The `main.py` file contains a teaching shell with detailed TODO comments that guide students through implementation.
+
+**Important Files:**
+- `main.py` - Teaching shell with TODO comments for students
+- `solution.py` - Complete working implementation (keep private from students initially)
 
 #### Recommended Teaching Sequence:
 
@@ -121,6 +130,8 @@ The `main.py` file contains TODO comments that guide you through building the ga
 3. **Ask questions** - Don't hesitate to ask for clarification
 4. **Experiment** - Try modifying values to see how they affect the game
 
+**Note:** There's also a `solution.py` file that contains the complete working implementation. Your instructor may share this with you after you've completed your own implementation, or use it to provide hints if you get stuck.
+
 ## 🔧 Customization Ideas
 
 Once students complete the basic game, encourage them to experiment with:
@@ -137,9 +148,11 @@ Once students complete the basic game, encourage them to experiment with:
 
 1. **"pgzrun not found"**
    - Ensure Pygame Zero is installed: `pip install pgzero`
+   - Or install all dependencies: `pip install -r requirements.txt`
 
 2. **"pgzhelper not found"**
-   - Install pgzhelper: `pip install pgzhelper`
+   - Install pgzhelper-rw: `pip install pgzhelper-rw`
+   - Or install all dependencies: `pip install -r requirements.txt`
 
 3. **Images not loading**
    - Check that all image files are in the `images/` folder
